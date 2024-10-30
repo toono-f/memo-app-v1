@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# プロジェクトの概要
 
-## Getting Started
+このプロジェクトは、モダンなウェブアプリケーションを作るための[Next.js](https://nextjs.org)というフレームワークを使用しています。
 
-First, run the development server:
+## 始め方
+
+### 1. 開発サーバーの起動
+以下のコマンドのいずれかを実行してください：
 
 ```bash
 npm run dev
-# or
+# または
 yarn dev
-# or
+# または
 pnpm dev
-# or
+# または
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. アプリケーションの確認
+ブラウザで[http://localhost:3000](http://localhost:3000)を開くと、作成したアプリケーションが表示されます。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. 編集方法
+`app/page.tsx`ファイルを編集することで、ページの内容を変更できます。
+変更内容は自動的に画面に反映されます。
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 特徴
+- 最新のウェブ技術を使用
+- 自動的な画面更新機能
+- [Vercel](https://vercel.com)が提供する最適化されたフォントの使用
 
-## Learn More
+## もっと詳しく知りたい方へ
 
-To learn more about Next.js, take a look at the following resources:
+- [Next.js公式ドキュメント](https://nextjs.org/docs) - 基本機能や使い方について
+- [Next.js学習ガイド](https://nextjs.org/learn) - 対話形式で学べるチュートリアル
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## デプロイ方法
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Next.jsの開発元であるVercelの[プラットフォーム](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme)を使用すると、簡単にアプリケーションを公開できます。
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+詳しい公開手順は[デプロイメントガイド](https://nextjs.org/docs/app/building-your-application/deploying)をご覧ください。
