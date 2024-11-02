@@ -30,26 +30,48 @@ export default function MarkdownEditor() {
   const [currentArticle, setCurrentArticle] = useState<Article | null>(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchArticles();
   }, []);
 
   async function fetchArticles() {
-    const fetchedArticles = await getArticles();
-    setArticles(fetchedArticles);
+    try {
+      const fetchedArticles = await getArticles();
+      setArticles(fetchedArticles);
+      setError(null);
+    } catch {
+      setError("記事の取得に失敗しました。");
+    }
   }
 
   async function handleSaveArticle() {
-    if (currentArticle) {
-      await updateArticle(currentArticle.id, title, content);
-    } else {
-      await createArticle(title, content);
+    setIsLoading(true);
+    try {
+      if (!title.trim() || !content.trim()) {
+        alert("タイトルとコンテンツを入力してください。");
+        return;
+      }
+
+      if (!confirm("記事を保存してもよろしいですか？")) {
+        return;
+      }
+
+      if (currentArticle) {
+        await updateArticle(currentArticle.id, title, content);
+      } else {
+        await createArticle(title, content);
+      }
+      setCurrentArticle(null);
+      setTitle("");
+      setContent("");
+      fetchArticles();
+    } finally {
+      setIsLoading(false);
     }
-    setCurrentArticle(null);
-    setTitle("");
-    setContent("");
-    fetchArticles();
   }
 
   function handleEditArticle(article: Article) {
@@ -59,6 +81,9 @@ export default function MarkdownEditor() {
   }
 
   async function handleDeleteArticle(id: number) {
+    if (!confirm("本当にこの記事を削除しますか？")) {
+      return;
+    }
     await deleteArticle(id);
     fetchArticles();
   }
@@ -94,8 +119,12 @@ export default function MarkdownEditor() {
             />
           </CardContent>
           <CardFooter>
-            <Button onClick={handleSaveArticle} className="hover-scale w-full">
-              {currentArticle ? "✨ 更新" : "💾 保存"}
+            <Button
+              onClick={handleSaveArticle}
+              className="hover-scale w-full"
+              disabled={isLoading}
+            >
+              {isLoading ? "保存中..." : currentArticle ? "✨ 更新" : "💾 保存"}
             </Button>
           </CardFooter>
         </Card>
@@ -208,34 +237,57 @@ export default function MarkdownEditor() {
           </CardTitle>
         </CardHeader>
         <CardContent>
+          <Input
+            type="text"
+            placeholder="記事を検索..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="mb-4"
+          />
           <div className="space-y-3">
-            {articles.map((article) => (
-              <div
-                key={article.id}
-                className="flex justify-between items-center p-3 rounded-lg bg-secondary/50 hover:bg-secondary transition-all-ease"
-              >
-                <span className="font-medium">{article.title}</span>
-                <div className="space-x-2">
-                  <Button
-                    onClick={() => handleEditArticle(article)}
-                    variant="outline"
-                    className="hover-scale"
-                  >
-                    ✏️ 編集
-                  </Button>
-                  <Button
-                    onClick={() => handleDeleteArticle(article.id)}
-                    variant="destructive"
-                    className="hover-scale"
-                  >
-                    🗑️ 削除
-                  </Button>
+            {articles
+              .filter(
+                (article) =>
+                  article.title
+                    .toLowerCase()
+                    .includes(searchQuery.toLowerCase()) ||
+                  article.content
+                    .toLowerCase()
+                    .includes(searchQuery.toLowerCase())
+              )
+              .map((article) => (
+                <div
+                  key={article.id}
+                  className="flex justify-between items-center p-3 rounded-lg bg-secondary/50 hover:bg-secondary transition-all-ease"
+                >
+                  <span className="font-medium">{article.title}</span>
+                  <div className="space-x-2">
+                    <Button
+                      onClick={() => handleEditArticle(article)}
+                      variant="outline"
+                      className="hover-scale"
+                    >
+                      ✏️ 編集
+                    </Button>
+                    <Button
+                      onClick={() => handleDeleteArticle(article.id)}
+                      variant="destructive"
+                      className="hover-scale"
+                    >
+                      🗑️ 削除
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         </CardContent>
       </Card>
+
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+          {error}
+        </div>
+      )}
     </div>
   );
 }
